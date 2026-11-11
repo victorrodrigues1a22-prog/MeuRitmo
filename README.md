@@ -1,27 +1,34 @@
 # Meu Ritmo
 
-Espaço pessoal para organizar rotina, tarefas, perfil e estudos.
+Planner de estudos e internato com login do ChatGPT e dados persistidos por conta.
 
-## Estrutura
+## Desenvolvimento local
 
-- `dist/index.html`: estrutura global, navegação e pontos de montagem das telas.
-- `dist/views/`: uma tela por arquivo (`dashboard`, `tasks`, `calendar` e `rotations`).
-- `dist/components/`: diálogos reutilizados para atividades e lembretes.
-- `dist/components/profile-widget.html`: perfil flutuante fixo na tela.
-- `dist/assets/styles/`: estilos separados por tema, layout, componentes, telas e responsividade.
-- `dist/assets/scripts/bootstrap.js`: carrega telas e diálogos.
-- `dist/assets/scripts/app.js`: navegação, tarefas, calendário e interações do painel.
-- `dist/assets/scripts/data.js`: cronograma de rodízios e atividades iniciais.
-- `dist/assets/scripts/profile.js`: personalização local do perfil.
-- `dist/assets/scripts/spotify.js`: autorização Spotify PKCE e faixa atual.
+Requer Node.js 22.13 ou mais recente.
 
-O Site é privado e usa o acesso da conta ChatGPT para autenticar visitantes. O cartão de perfil permite personalizar nome, foto e capa; esses dados, tarefas, lembretes e tema ficam neste navegador.
+```sh
+npm run dev
+```
 
-## Integrações
+No modo local, o starter oferece uma conta simulada de desenvolvimento em `/signin-with-chatgpt?return_to=/`.
 
-- **Login:** o acesso privado exige autenticação da conta ChatGPT na plataforma Sites. O link “Sair da conta” encerra essa sessão.
-- **Spotify:** em “Conectar Spotify”, informe o Client ID do app criado no Spotify for Developers e cadastre o Redirect URI mostrado pelo painel. A autorização solicita apenas a leitura da faixa atual. O player pode ser minimizado.
-- **ChatGPT:** o atalho abre o ChatGPT em outra aba. O site não acessa conversas nem sincroniza o histórico da conta; isso exige uma integração/API autorizada separadamente.
-- **Perfil:** nome, foto e imagem de fundo são salvos localmente neste dispositivo.
+## Dados e segurança
 
-O nome do produto é generalista; o conteúdo do internato continua disponível na seção de cronograma.
+- A página principal exige login com ChatGPT e usa o fluxo de autenticação hospedado pelo Sites.
+- Tarefas, lembretes, perfil e tema são salvos no D1, associados ao identificador estável daquela conta neste Site.
+- As rotas de leitura e gravação conferem a identidade em cada solicitação; o navegador não escolhe o identificador da conta.
+- Na primeira entrada após a atualização, dados existentes no `localStorage` são importados para a conta conectada. Ao trocar de conta, o cache local anterior não é importado para a outra conta.
+- Preferências e tokens de acesso do Spotify continuam locais ao navegador; tokens não são enviados ao servidor.
+- A interface permanece modular em `public/planner/views`, `public/planner/components`, `public/planner/assets/scripts` e `public/planner/assets/styles`.
+
+## Persistência local
+
+O Site usa D1 com a tabela `planner_data`. O esquema fica em `db/schema.ts`, com migrações em `drizzle/`.
+
+Para gerar uma nova migração depois de mudar o esquema:
+
+```sh
+npm run db:generate
+```
+
+O deploy do Sites aplica as migrações hospedadas antes de publicar o Worker.
