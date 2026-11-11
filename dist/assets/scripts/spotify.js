@@ -53,6 +53,7 @@ async function sha256(value) {
 function openSetup() {
   $("#spotifyClientId").value = localStorage.getItem(CLIENT_KEY) || "";
   $("#spotifyRedirectUri").textContent = REDIRECT_URI;
+  $("#spotifyCopyStatus").textContent = "";
   $("#spotifyConfigDialog").showModal();
 }
 
@@ -212,6 +213,14 @@ export function initSpotify() {
   });
   $("#spotifySettings").addEventListener("click", openSetup);
   $("[data-close-spotify-config]").addEventListener("click", () => $("#spotifyConfigDialog").close());
+  $("#copySpotifyRedirect").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(REDIRECT_URI);
+      $("#spotifyCopyStatus").textContent = "Endereço copiado.";
+    } catch {
+      $("#spotifyCopyStatus").textContent = "Selecione o endereço acima e copie manualmente.";
+    }
+  });
   $("#spotifyMinimize").addEventListener("click", () => {
     const minimized = widget.classList.toggle("is-minimized");
     localStorage.setItem("rotinamed.spotify.minimized", String(minimized));

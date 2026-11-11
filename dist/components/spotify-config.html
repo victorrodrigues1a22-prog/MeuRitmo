@@ -1,11 +1,20 @@
-<dialog id="spotifyConfigDialog">
+<dialog id="spotifyConfigDialog" class="spotify-config-dialog">
   <form id="spotifyConfigForm">
     <div class="modal-head"><h2>Conectar ao Spotify</h2><button type="button" class="icon-btn" data-close-spotify-config aria-label="Fechar">×</button></div>
     <div class="modal-body">
-      <p class="profile-security-note">Crie um app no Spotify for Developers e cadastre este endereço como Redirect URI. O ID do app é público; nenhum client secret será solicitado ou armazenado.</p>
+      <details class="spotify-tutorial" open>
+        <summary>Mini tutorial: onde encontrar o Client ID</summary>
+        <ol>
+          <li><a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Abra o Spotify for Developers</a> e entre na sua conta Spotify.</li>
+          <li>Escolha <b>Create app</b> e crie um app para o Meu Ritmo.</li>
+          <li>Nas configurações do app, copie o <b>Client ID</b>.</li>
+          <li>Na mesma tela, cole o endereço abaixo em <b>Redirect URIs</b> e salve. Ele precisa corresponder exatamente ao endereço cadastrado.</li>
+          <li>Volte aqui, cole o Client ID no campo e selecione <b>Salvar e autorizar</b>.</li>
+        </ol>
+      </details>
       <div class="field full"><label for="spotifyClientId">Client ID do app Spotify</label><input id="spotifyClientId" autocomplete="off" required placeholder="Cole o Client ID"></div>
-      <div class="redirect-box"><span>Redirect URI para cadastrar</span><code id="spotifyRedirectUri"></code></div>
-      <a class="text-btn docs-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Abrir Spotify for Developers ↗</a>
+      <div class="redirect-box"><span>Redirect URI para cadastrar</span><div class="redirect-copy-row"><code id="spotifyRedirectUri"></code><button class="copy-uri-button" id="copySpotifyRedirect" type="button">Copiar</button></div><small id="spotifyCopyStatus" aria-live="polite"></small></div>
+      <p class="spotify-secret-note">O site pede apenas o Client ID. Não cole nem compartilhe o Client Secret.</p>
       <div class="modal-actions"><span></span><button class="primary" type="submit">Salvar e autorizar</button></div>
     </div>
   </form>
