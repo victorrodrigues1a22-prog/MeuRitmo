@@ -147,7 +147,7 @@ body {
   height: 100dvh;
   flex-direction: column;
   overflow: hidden;
-  background: #f7f8f5;
+  background: #faf8f8;
   transition: background .2s ease, color .2s ease;
 }
 
@@ -157,10 +157,10 @@ body {
   min-height: 54px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e4e9e2;
+  border-bottom: 1px solid #ece2e5;
   background: #fff;
   padding: 0 22px;
-  color: #27382d;
+  color: #30272b;
   font: 600 14px/1.2 "DM Sans", Arial, sans-serif;
   transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
@@ -178,29 +178,29 @@ body {
   height: 29px;
   place-items: center;
   border-radius: 10px;
-  background: #e4f1e3;
-  color: #568e5d;
+  background: #f2e7ea;
+  color: #874357;
   font-size: 19px;
 }
 
 .planner-greeting {
   max-width: min(35vw, 280px);
   overflow: hidden;
-  color: #657168;
+  color: #84787c;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .planner-signout {
   border-radius: 9px;
-  background: #f2f5f1;
+  background: #f5eff0;
   padding: 8px 12px;
-  color: #3d6747;
+  color: #6e3044;
   text-decoration: none;
 }
 
 .planner-signout:hover {
-  background: #e7efe5;
+  background: #eee0e4;
 }
 
 .planner-frame {
@@ -214,17 +214,17 @@ body {
   display: grid;
   min-height: 100dvh;
   place-items: center;
-  background: radial-gradient(ellipse at 50% 18%, #f3f8f0 0, #fafbf8 54%, #f4f6f1 100%);
+  background: radial-gradient(ellipse at 50% 18%, #f8eff2 0, #fbf9f9 54%, #f5eff0 100%);
   padding: 28px 18px 64px;
   position: relative;
 }
 
 .login-card {
   width: min(100%, 420px);
-  border: 1px solid #e4e9e1;
+  border: 1px solid #ece2e5;
   border-radius: 24px;
   background: rgba(255, 255, 255, .96);
-  box-shadow: 0 20px 65px rgba(43, 66, 46, .09);
+  box-shadow: 0 20px 65px rgba(70, 38, 49, .09);
   padding: 40px;
   text-align: center;
 }
@@ -236,28 +236,28 @@ body {
   place-items: center;
   margin: 0 auto 22px;
   border-radius: 18px;
-  background: #e9f3e7;
-  color: #5e9861;
+  background: #f2e7ea;
+  color: #874357;
   font-size: 30px;
 }
 
 .login-eyebrow {
   margin: 0 0 10px;
-  color: #729277;
+  color: #8a596b;
   font: 700 10px/1.4 "DM Sans", Arial, sans-serif;
   letter-spacing: .14em;
 }
 
 .login-card h1 {
   margin: 0;
-  color: #293a2e;
+  color: #35282d;
   font: 700 clamp(25px, 6vw, 32px)/1.2 "Manrope", Arial, sans-serif;
   letter-spacing: -.04em;
 }
 
 .login-description {
   margin: 14px 0 25px;
-  color: #737e74;
+  color: #81757a;
   font: 400 14px/1.65 "DM Sans", Arial, sans-serif;
 }
 
@@ -268,26 +268,26 @@ body {
   justify-content: center;
   gap: 10px;
   border-radius: 12px;
-  background: #426d4a;
+  background: #7f3b50;
   color: #fff;
   font: 700 14px "DM Sans", Arial, sans-serif;
   text-decoration: none;
   transition: background .16s ease, transform .16s ease;
 }
 
-.login-button:hover { background: #345c3c; transform: translateY(-1px); }
+.login-button:hover { background: #682c40; transform: translateY(-1px); }
 .login-button span { font-size: 17px; }
 
 .login-footnote {
   margin: 17px 0 0;
-  color: #929b92;
+  color: #91858a;
   font: 400 11px/1.5 "DM Sans", Arial, sans-serif;
 }
 
 .login-footer {
   position: absolute;
   bottom: 20px;
-  color: #98a097;
+  color: #94888d;
   font: 500 11px "DM Sans", Arial, sans-serif;
 }
 
