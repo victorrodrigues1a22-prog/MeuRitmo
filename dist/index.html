@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="./assets/styles/components.css" />
   <link rel="stylesheet" href="./assets/styles/dialogs.css" />
   <link rel="stylesheet" href="./assets/styles/responsive.css" />
+  <link rel="stylesheet" href="./assets/styles/profile.css" />
+  <link rel="stylesheet" href="./assets/styles/spotify.css" />
 </head>
 <body>
 <div class="app">
@@ -32,13 +34,14 @@
       <div class="side-label">Seu ciclo atual</div>
       <div class="rotation-card"><div class="overline">Rodízio · Grupo 01</div><h3 id="currentRotation">—</h3><p id="currentDates">—</p><div class="rotation-progress"><span id="rotationProgress"></span></div></div>
     </div>
-    <div class="side-bottom"><div class="side-label">Organização</div><div class="profile"><div class="avatar">🩺</div><div><b>Estudante de Medicina</b><small>Turma 47 · 1º ano</small></div></div></div>
+    <div class="side-bottom"><div class="side-label">Organização</div><button class="profile profile-button" id="openProfile" type="button"><span class="avatar" id="profileAvatar" role="img" aria-label="Foto de perfil">🩺</span><span class="profile-copy"><b id="profileName">Estudante de Medicina</b><small id="profileStatus">Acesso privado · conta ChatGPT</small></span><span class="profile-edit-icon" aria-hidden="true">⚙</span></button></div>
   </aside>
   <main>
     <div class="topbar"><div class="crumb">Espaço pessoal <span style="padding:0 6px">/</span><span id="crumbName">Visão geral</span></div><div class="top-actions"><button class="icon-btn" id="notifyBtn" title="Ativar avisos" aria-label="Ativar avisos">♧</button><button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">☾</button><button class="icon-btn" id="newTop" title="Nova atividade" aria-label="Nova atividade">＋</button></div></div>
     <div id="screens"></div>
   </main>
 </div>
+<div id="widgets"></div>
 <div id="dialogs"></div>
 <script type="module" src="./assets/scripts/bootstrap.js"></script>
 </body>

@@ -1,6 +1,6 @@
 const screenNames = ["dashboard", "tasks", "calendar", "rotations"];
 
-const [screens, taskDialog, noticeDialog] = await Promise.all([
+const [screens, taskDialog, noticeDialog, profileDialog, spotifyConfig, spotifyPlayer] = await Promise.all([
   Promise.all(
     screenNames.map(async (name) => {
       const response = await fetch(`./views/${name}.html`);
@@ -10,9 +10,19 @@ const [screens, taskDialog, noticeDialog] = await Promise.all([
   ),
   fetch("./components/task-dialog.html").then((response) => response.text()),
   fetch("./components/notice-dialog.html").then((response) => response.text()),
+  fetch("./components/profile-dialog.html").then((response) => response.text()),
+  fetch("./components/spotify-config.html").then((response) => response.text()),
+  fetch("./components/spotify-player.html").then((response) => response.text()),
 ]);
 
 document.querySelector("#screens").innerHTML = screens.join("");
-document.querySelector("#dialogs").innerHTML = taskDialog + noticeDialog;
+document.querySelector("#dialogs").innerHTML = taskDialog + noticeDialog + profileDialog + spotifyConfig;
+document.querySelector("#widgets").innerHTML = spotifyPlayer;
 
 await import("./app.js");
+const [{ initProfile }, { initSpotify }] = await Promise.all([
+  import("./profile.js"),
+  import("./spotify.js"),
+]);
+initProfile();
+initSpotify();

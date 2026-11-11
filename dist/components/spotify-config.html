@@ -1,0 +1,12 @@
+<dialog id="spotifyConfigDialog">
+  <form id="spotifyConfigForm">
+    <div class="modal-head"><h2>Conectar ao Spotify</h2><button type="button" class="icon-btn" data-close-spotify-config aria-label="Fechar">×</button></div>
+    <div class="modal-body">
+      <p class="profile-security-note">Crie um app no Spotify for Developers e cadastre este endereço como Redirect URI. O ID do app é público; nenhum client secret será solicitado ou armazenado.</p>
+      <div class="field full"><label for="spotifyClientId">Client ID do app Spotify</label><input id="spotifyClientId" autocomplete="off" required placeholder="Cole o Client ID"></div>
+      <div class="redirect-box"><span>Redirect URI para cadastrar</span><code id="spotifyRedirectUri"></code></div>
+      <a class="text-btn docs-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">Abrir Spotify for Developers ↗</a>
+      <div class="modal-actions"><span></span><button class="primary" type="submit">Salvar e autorizar</button></div>
+    </div>
+  </form>
+</dialog>

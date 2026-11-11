@@ -1,0 +1,14 @@
+<dialog id="profileDialog">
+  <form id="profileForm">
+    <div class="modal-head"><h2>Personalizar perfil</h2><button type="button" class="icon-btn" data-close-profile aria-label="Fechar">×</button></div>
+    <div class="modal-body">
+      <p class="profile-security-note">O acesso ao site é protegido pela sua conta ChatGPT. Estas preferências ficam salvas neste navegador.</p>
+      <div class="form-grid">
+        <div class="field full"><label for="profileNameInput">Nome de usuário</label><input id="profileNameInput" maxlength="40" required placeholder="Como quer ser chamada?"></div>
+        <div class="field full"><label for="profilePhotoInput">Foto de perfil</label><input id="profilePhotoInput" type="file" accept="image/png,image/jpeg,image/webp"><small class="field-hint">PNG, JPG ou WebP · até 1 MB</small></div>
+        <div class="field full"><label for="profileBackgroundInput">Fundo do perfil</label><input id="profileBackgroundInput" type="file" accept="image/png,image/jpeg,image/webp"><small class="field-hint">Uma imagem de capa para o cartão do perfil · até 1 MB</small></div>
+      </div>
+      <div class="modal-actions profile-modal-actions"><div class="profile-actions-left"><button class="text-btn" id="resetProfile" type="button">Restaurar padrão</button><a class="signout-link" href="/signout-with-chatgpt?returnTo=%2F" target="_top">Sair da conta</a></div><button class="primary" type="submit">Salvar perfil</button></div>
+    </div>
+  </form>
+</dialog>
