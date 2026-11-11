@@ -2,7 +2,9 @@ const CLIENT_KEY = "rotinamed.spotify.clientId";
 const ACCESS_KEY = "rotinamed.spotify.accessToken";
 const EXPIRY_KEY = "rotinamed.spotify.expiresAt";
 const REFRESH_KEY = "rotinamed.spotify.refreshToken";
-const REDIRECT_URI = window.location.origin + window.location.pathname;
+// O planner roda dentro de /planner/, mas o callback cadastrado no Spotify é a raiz do site.
+// Use a mesma URI na autorização e na troca do código por token.
+const REDIRECT_URI = new URL("/", window.location.href).toString();
 
 const $ = (selector) => document.querySelector(selector);
 const setStatus = (message) => { $("#spotifyStatus").textContent = message; };
@@ -24,6 +26,15 @@ function cleanCallbackUrl() {
   const callback = new URL(window.location.href);
   ["code", "state", "error", "error_description"].forEach((key) => callback.searchParams.delete(key));
   history.replaceState({}, "", callback.pathname + callback.search + callback.hash);
+  // O callback chega primeiro à página externa, que repassa os parâmetros ao iframe.
+  // Limpe também a URL externa para que um refresh não reutilize um código expirado.
+  try {
+    const parentUrl = new URL(window.parent.location.href);
+    ["code", "state", "error", "error_description"].forEach((key) => parentUrl.searchParams.delete(key));
+    window.parent.history.replaceState({}, "", parentUrl.pathname + parentUrl.search + parentUrl.hash);
+  } catch {
+    // A conexão continua funcional mesmo quando o site estiver embutido em outro domínio.
+  }
 }
 
 function restoreConnectionPage(error) {
