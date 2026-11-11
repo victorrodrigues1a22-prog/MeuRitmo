@@ -1,0 +1,1 @@
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;transition:background .2s,color .2s}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer} .app{min-height:100vh;display:grid;grid-template-columns:244px minmax(0,1fr)}

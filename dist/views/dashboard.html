@@ -1,0 +1,18 @@
+<section class="view active" id="view-dashboard">
+      <div class="page-head"><div><div class="eyebrow" id="todayLabel">QUARTA-FEIRA, 11 DE NOVEMBRO</div><h1>Seu espaço de foco.</h1><p>Um passo de cada vez também é progresso.</p></div><button class="primary" id="newTask"><span class="plus">＋</span>Nova atividade</button></div>
+      <div class="welcome"><div><h2>Oi, doutora! Como está sua semana?</h2><p>Seu planejamento está aqui para deixar a rotina mais leve.</p></div><div class="welcome-stats"><div><strong id="welcomeDone">0</strong><span>concluídas</span></div><div><strong id="welcomeLeft">0</strong><span>em aberto</span></div></div></div>
+      <div class="stats">
+        <div class="stat"><div class="stat-top">Atividades de hoje <span class="stat-icon ico-green">◷</span></div><strong id="todayCount">0</strong><small>no seu planejamento</small></div>
+        <div class="stat"><div class="stat-top">Concluídas <span class="stat-icon ico-lav">✓</span></div><strong id="doneCount">0</strong><small>um bom trabalho!</small></div>
+        <div class="stat"><div class="stat-top">Esta semana <span class="stat-icon ico-peach">▤</span></div><strong id="weekCount">0</strong><small>atividades planejadas</small></div>
+        <div class="stat"><div class="stat-top">Próximo rodízio <span class="stat-icon ico-blue">✳</span></div><strong id="nextRotation">—</strong><small id="nextRotationDate">—</small></div>
+      </div>
+      <div class="content-grid">
+        <div class="panel"><div class="panel-head"><div><h2>Seu plano de estudos</h2><p>Pequenas metas para hoje e para a semana.</p></div><div class="task-tabs"><button class="active" data-filter="today">Hoje</button><button data-filter="upcoming">Próximas</button><button data-filter="all">Todas</button></div></div><div class="tasks" id="taskList"></div></div>
+        <div class="right-stack">
+          <div class="panel"><div class="panel-head"><div><h2>Um lembrete para você</h2></div><button class="text-btn" id="newNotice">＋ adicionar</button></div><div id="noticeList"></div></div>
+          <div class="panel"><div class="mini-cal-head"><button id="prevMonth" aria-label="Mês anterior">‹</button><b id="monthTitle"></b><button id="nextMonth" aria-label="Próximo mês">›</button></div><div class="calendar" id="miniCalendar"></div></div>
+          <div class="assistant-card"><div class="assistant-top"><div class="assistant-ico">✧</div><div><b>Companhia de estudos</b><small>Seu assistente de organização</small></div></div><p id="assistantReply">Precisa organizar uma matéria ou quebrar uma meta em etapas? Me conta.</p><form class="assistant-ask" id="assistantForm"><input id="assistantInput" placeholder="Ex.: como revisar hoje?" aria-label="Pergunte ao assistente"><button aria-label="Enviar pergunta">➜</button></form></div>
+        </div>
+      </div>
+    </section>
