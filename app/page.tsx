@@ -1,4 +1,5 @@
-import { chatGPTSignOutPath, requireChatGPTUser } from "./chatgpt-auth";
+import { chatGPTSignOutPath, getChatGPTUser } from "./chatgpt-auth";
+import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +8,8 @@ type HomeProps = {
 };
 
 export default async function Home({ searchParams }: HomeProps) {
-  const user = await requireChatGPTUser("/");
+  const user = await getChatGPTUser();
+  if (!user) redirect("/login");
   const search = new URLSearchParams();
   for (const [key, value] of Object.entries(await searchParams)) {
     if (Array.isArray(value)) value.forEach((entry) => search.append(key, entry));
@@ -24,7 +26,7 @@ export default async function Home({ searchParams }: HomeProps) {
         </div>
         <div className="planner-account">
           <span className="planner-greeting">{user.displayName}</span>
-          <a href={chatGPTSignOutPath("/")} target="_top" className="planner-signout">
+          <a href={chatGPTSignOutPath("/login")} target="_top" className="planner-signout">
             Sair da conta
           </a>
         </div>
