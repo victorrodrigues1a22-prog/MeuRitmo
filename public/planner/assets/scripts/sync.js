@@ -119,6 +119,58 @@ export function persistPlannerPatch(patch) {
   });
 }
 
+const PHOTO_IMPORT_TOKEN = "estudos-fotos-import-2026-11";
+const photoStudyEntries = [
+  ["Ultrassonografia em Obstetrícia", "Bloco 1"],
+  ["Modificações do Organismo Materno", "Bloco 1"],
+  ["Assistência ao Pré-Natal", "Bloco 1"],
+  ["Assistência ao Parto", "Bloco 4"],
+  ["Infecções e Gravidez", "Bloco 7"],
+  ["Rotura Prematura de Membranas", "Bloco 7"],
+  ["Gestação Ectópica", "Bloco 8"],
+  ["Doença Trofoblástica Gestacional", "Bloco 8"],
+  ["Abortamento", "Bloco 8"],
+  ["Descolamento Prematuro de Placenta", "Bloco 9"],
+  ["Placenta Prévia", "Bloco 9"],
+  ["Outros sangramentos da segunda metade da gestação", "Bloco 9"],
+  ["Síndromes Hipertensivas na Gestação", "Bloco 10"],
+  ["Diabetes na Gestação", "Bloco 11"],
+  ["Restrição de Crescimento Fetal", "Bloco 13"],
+  ["Avaliação da Vitalidade Fetal", "Bloco 13"],
+  ["Trabalho de Parto Prematuro", "Bloco 16"],
+  ["Colo Curto e Incompetência Istmocervical", "Bloco 16"],
+  ["Hemorragia Pós-Parto", "Bloco 17"],
+  ["Puerpério", "Bloco 17"],
+  ["Pneumonia: adquirida na comunidade", "Semana 1 · 05–11/10"],
+  ["Derrame pleural", "Semana 1 · 05–11/10"],
+  ["Tuberculose: clínica e diagnóstico", "Semana 2 · 12–18/10"],
+  ["Asma", "Semana 2 · 12–18/10"],
+  ["Doença Pulmonar Obstrutiva Crônica (DPOC)", "Semana 2 · 12–18/10"],
+  ["Tuberculose: tratamento", "Semana 3 · 19–25/10"],
+  ["Tromboembolismo Pulmonar", "Semana 3 · 19–25/10"],
+  ["HIV e Doenças Oportunistas", "Semana 4 · 26/10–01/11"],
+  ["Síndrome de Guillain-Barré", "Semana 4 · 26/10–01/11"],
+];
+
+export function importSubjectsFromPhotosIfRequested() {
+  const url = new URL(window.location.href);
+  if (url.searchParams.get("import-study-photos") !== PHOTO_IMPORT_TOKEN) return;
+  const userId = localStorage.getItem(OWNER_KEY);
+  if (!userId) return;
+  const marker = `rotinamed.photo-import.${userId}`;
+  if (localStorage.getItem(marker) === "done") return;
+  const existing = Array.isArray(plannerData.studied) ? plannerData.studied : [];
+  const known = new Set(existing.map((entry) => String(entry.subject || "").toLocaleLowerCase("pt-BR")));
+  const additions = photoStudyEntries
+    .filter(([subject]) => !known.has(subject.toLocaleLowerCase("pt-BR")))
+    .map(([subject, reference]) => ({ id: crypto.randomUUID(), subject, reference, date: "" }));
+  const studied = [...existing, ...additions];
+  localStorage.setItem(marker, "done");
+  persistPlannerPatch({ studied });
+  url.searchParams.delete("import-study-photos");
+  history.replaceState({}, "", url.pathname + url.search + url.hash);
+}
+
 window.addEventListener("online", () => {
   if (Object.keys(plannerData).length) persistPlannerPatch(plannerData);
 });

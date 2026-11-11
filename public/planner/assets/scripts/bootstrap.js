@@ -20,8 +20,9 @@ document.querySelector("#screens").innerHTML = screens.join("");
 document.querySelector("#dialogs").innerHTML = taskDialog + noticeDialog + profileDialog + spotifyConfig;
 document.querySelector("#widgets").innerHTML = profileWidget + spotifyPlayer;
 
-const { initializePlannerSync } = await import("./sync.js");
+const { initializePlannerSync, importSubjectsFromPhotosIfRequested } = await import("./sync.js");
 await initializePlannerSync();
+importSubjectsFromPhotosIfRequested();
 await import("./app.js");
 const [{ initProfile }, { initSpotify }] = await Promise.all([
   import("./profile.js"),
