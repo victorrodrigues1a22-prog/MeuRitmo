@@ -15,6 +15,29 @@ const clearToken = () => {
   sessionStorage.removeItem(EXPIRY_KEY);
   sessionStorage.removeItem(REFRESH_KEY);
 };
+const clearOAuthAttempt = () => {
+  sessionStorage.removeItem("rotinamed.spotify.verifier");
+  sessionStorage.removeItem("rotinamed.spotify.state");
+};
+
+function cleanCallbackUrl() {
+  const callback = new URL(window.location.href);
+  ["code", "state", "error", "error_description"].forEach((key) => callback.searchParams.delete(key));
+  history.replaceState({}, "", callback.pathname + callback.search + callback.hash);
+}
+
+function restoreConnectionPage(error) {
+  clearToken();
+  clearOAuthAttempt();
+  cleanCallbackUrl();
+  const dialog = $("#spotifyConfigDialog");
+  if (dialog.open) dialog.close();
+  setTrackText("Conexão não concluída", "Você pode tentar novamente");
+  const detail = error?.message || "O Spotify não concluiu a conexão.";
+  setStatus(`${detail} Confira a configuração ou tente novamente.`);
+  $("#spotifyConnect").textContent = localStorage.getItem(CLIENT_KEY) ? "Tentar novamente" : "Conectar Spotify";
+  $("#spotifyConnect").hidden = false;
+}
 
 function base64Url(bytes) {
   let binary = "";
@@ -41,6 +64,7 @@ async function authorize() {
   }
   const verifier = base64Url(crypto.getRandomValues(new Uint8Array(64)));
   const state = base64Url(crypto.getRandomValues(new Uint8Array(24)));
+  setStatus("Abrindo o Spotify para autorizar a conexão…");
   sessionStorage.setItem("rotinamed.spotify.verifier", verifier);
   sessionStorage.setItem("rotinamed.spotify.state", state);
   const params = new URLSearchParams({
@@ -59,17 +83,14 @@ async function completeAuthorization() {
   const query = new URLSearchParams(window.location.search);
   const code = query.get("code");
   if (query.get("error")) {
-    setStatus("A autorização foi cancelada.");
-    history.replaceState({}, "", REDIRECT_URI);
-    return;
+    throw new Error(query.get("error_description") || "A autorização foi cancelada.");
   }
   if (!code) return;
   const expectedState = sessionStorage.getItem("rotinamed.spotify.state");
   const returnedState = query.get("state");
   const verifier = sessionStorage.getItem("rotinamed.spotify.verifier");
-  sessionStorage.removeItem("rotinamed.spotify.state");
-  sessionStorage.removeItem("rotinamed.spotify.verifier");
-  history.replaceState({}, "", REDIRECT_URI);
+  clearOAuthAttempt();
+  cleanCallbackUrl();
   if (!expectedState || expectedState !== returnedState || !verifier) {
     throw new Error("A validação de segurança do Spotify falhou. Tente conectar novamente.");
   }
@@ -127,6 +148,7 @@ async function loadCurrentTrack() {
     clearToken();
     setTrackText("Conecte sua conta", "Seu Spotify fica aqui");
     setStatus("A autorização acontece com o Spotify.");
+    $("#spotifyConnect").textContent = localStorage.getItem(CLIENT_KEY) ? "Tentar novamente" : "Conectar Spotify";
     $("#spotifyConnect").hidden = false;
     return;
   }
@@ -147,6 +169,7 @@ async function loadCurrentTrack() {
       clearToken();
       setTrackText("Reconecte o Spotify", "A sessão de reprodução expirou");
       setStatus("Conecte novamente para continuar.");
+      $("#spotifyConnect").textContent = "Conectar novamente";
       $("#spotifyConnect").hidden = false;
       return;
     }
@@ -165,7 +188,17 @@ async function loadCurrentTrack() {
     setStatus(playback.is_playing ? "Reproduzindo agora" : "Pausada no Spotify");
   } catch (error) {
     setStatus(error.message || "Falha ao consultar o Spotify.");
+    $("#spotifyConnect").textContent = "Tentar novamente";
+    $("#spotifyConnect").hidden = false;
   }
+}
+
+async function retryOrAuthorize() {
+  if (sessionStorage.getItem(ACCESS_KEY) || sessionStorage.getItem(REFRESH_KEY)) {
+    await loadCurrentTrack();
+    return;
+  }
+  await authorize();
 }
 
 export function initSpotify() {
@@ -174,7 +207,9 @@ export function initSpotify() {
   if (wasMinimized) widget.classList.add("is-minimized");
   $("#spotifyMinimize").textContent = wasMinimized ? "+" : "−";
   $("#spotifyRedirectUri").textContent = REDIRECT_URI;
-  $("#spotifyConnect").addEventListener("click", authorize);
+  $("#spotifyConnect").addEventListener("click", () => {
+    retryOrAuthorize().catch(restoreConnectionPage);
+  });
   $("#spotifySettings").addEventListener("click", openSetup);
   $("[data-close-spotify-config]").addEventListener("click", () => $("#spotifyConfigDialog").close());
   $("#spotifyMinimize").addEventListener("click", () => {
@@ -189,8 +224,12 @@ export function initSpotify() {
     if (!clientId) return;
     localStorage.setItem(CLIENT_KEY, clientId);
     $("#spotifyConfigDialog").close();
-    await authorize();
+    try {
+      await authorize();
+    } catch (error) {
+      restoreConnectionPage(error);
+    }
   });
-  completeAuthorization().then(loadCurrentTrack).catch((error) => setStatus(error.message));
+  completeAuthorization().then(loadCurrentTrack).catch(restoreConnectionPage);
   window.setInterval(loadCurrentTrack, 30000);
 }
