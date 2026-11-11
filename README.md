@@ -1,12 +1,13 @@
-# Rotina Med
+# Meu Ritmo
 
-Painel estático para planejamento do internato da 47ª turma, 1º ano, Grupo 01.
+Espaço pessoal para organizar rotina, tarefas, perfil e estudos.
 
 ## Estrutura
 
 - `dist/index.html`: estrutura global, navegação e pontos de montagem das telas.
 - `dist/views/`: uma tela por arquivo (`dashboard`, `tasks`, `calendar` e `rotations`).
 - `dist/components/`: diálogos reutilizados para atividades e lembretes.
+- `dist/components/profile-widget.html`: perfil flutuante fixo na tela.
 - `dist/assets/styles/`: estilos separados por tema, layout, componentes, telas e responsividade.
 - `dist/assets/scripts/bootstrap.js`: carrega telas e diálogos.
 - `dist/assets/scripts/app.js`: navegação, tarefas, calendário e interações do painel.
@@ -22,3 +23,5 @@ O Site é privado e usa o acesso da conta ChatGPT para autenticar visitantes. O 
 - **Spotify:** em “Conectar Spotify”, informe o Client ID do app criado no Spotify for Developers e cadastre o Redirect URI mostrado pelo painel. A autorização solicita apenas a leitura da faixa atual. O player pode ser minimizado.
 - **ChatGPT:** o atalho abre o ChatGPT em outra aba. O site não acessa conversas nem sincroniza o histórico da conta; isso exige uma integração/API autorizada separadamente.
 - **Perfil:** nome, foto e imagem de fundo são salvos localmente neste dispositivo.
+
+O nome do produto é generalista; o conteúdo do internato continua disponível na seção de cronograma.

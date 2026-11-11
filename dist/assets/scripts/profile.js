@@ -1,5 +1,5 @@
 const PROFILE_KEY = "rotinamed.profile";
-const DEFAULT_NAME = "Estudante de Medicina";
+const DEFAULT_NAME = "Meu perfil";
 
 const readProfile = () => {
   try {
@@ -28,7 +28,7 @@ function applyProfile(profile) {
   const card = document.querySelector("#openProfile");
   if (nameNode) nameNode.textContent = name;
   if (avatar) {
-    avatar.textContent = profile.photo ? "" : "🩺";
+    avatar.textContent = profile.photo ? "" : "◉";
     avatar.style.backgroundImage = profile.photo ? `url("${profile.photo}")` : "";
     avatar.style.backgroundSize = "cover";
     avatar.style.backgroundPosition = "center";
@@ -52,6 +52,8 @@ export function initProfile() {
   const nameInput = document.querySelector("#profileNameInput");
   const photoInput = document.querySelector("#profilePhotoInput");
   const coverInput = document.querySelector("#profileBackgroundInput");
+  const photoLabel = document.querySelector("#profilePhotoName");
+  const coverLabel = document.querySelector("#profileBackgroundName");
   let profile = readProfile();
 
   applyProfile(profile);
@@ -59,9 +61,13 @@ export function initProfile() {
     nameInput.value = profile.name || DEFAULT_NAME;
     photoInput.value = "";
     coverInput.value = "";
+    photoLabel.textContent = "Nenhum arquivo selecionado";
+    coverLabel.textContent = "Nenhum arquivo selecionado";
     dialog.showModal();
   });
   document.querySelector("[data-close-profile]").addEventListener("click", () => dialog.close());
+  photoInput.addEventListener("change", () => { photoLabel.textContent = photoInput.files[0]?.name || "Nenhum arquivo selecionado"; });
+  coverInput.addEventListener("change", () => { coverLabel.textContent = coverInput.files[0]?.name || "Nenhum arquivo selecionado"; });
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -85,6 +91,8 @@ export function initProfile() {
     nameInput.value = DEFAULT_NAME;
     photoInput.value = "";
     coverInput.value = "";
+    photoLabel.textContent = "Nenhum arquivo selecionado";
+    coverLabel.textContent = "Nenhum arquivo selecionado";
     applyProfile(profile);
   });
 }

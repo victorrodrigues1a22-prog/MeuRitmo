@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f7f8f5" />
-  <meta name="description" content="Seu espaço de rotina e planejamento do internato." />
-  <title>Rotina Med — seu internato, no seu ritmo</title>
+  <meta name="description" content="Seu espaço para organizar rotina, estudos e planos pessoais." />
+  <title>Meu Ritmo — rotina e planejamento</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -23,7 +23,7 @@
 <body>
 <div class="app">
   <aside>
-    <div class="brand"><div class="brand-mark">✳</div><div><b>rotina med</b><small>seu internato, no seu ritmo</small></div></div>
+    <div class="brand"><div class="brand-mark">✳</div><div><b>meu ritmo</b><small>organize seu tempo, no seu ritmo</small></div></div>
     <div class="nav">
       <button class="active" data-view="dashboard"><span class="ico">⌂</span>Visão geral</button>
       <button data-view="tasks"><span class="ico">☑</span>Minhas tarefas <span class="count" id="navCount">0</span></button>
@@ -34,7 +34,6 @@
       <div class="side-label">Seu ciclo atual</div>
       <div class="rotation-card"><div class="overline">Rodízio · Grupo 01</div><h3 id="currentRotation">—</h3><p id="currentDates">—</p><div class="rotation-progress"><span id="rotationProgress"></span></div></div>
     </div>
-    <div class="side-bottom"><div class="side-label">Organização</div><button class="profile profile-button" id="openProfile" type="button"><span class="avatar" id="profileAvatar" role="img" aria-label="Foto de perfil">🩺</span><span class="profile-copy"><b id="profileName">Estudante de Medicina</b><small id="profileStatus">Acesso privado · conta ChatGPT</small></span><span class="profile-edit-icon" aria-hidden="true">⚙</span></button></div>
   </aside>
   <main>
     <div class="topbar"><div class="crumb">Espaço pessoal <span style="padding:0 6px">/</span><span id="crumbName">Visão geral</span></div><div class="top-actions"><button class="icon-btn" id="notifyBtn" title="Ativar avisos" aria-label="Ativar avisos">♧</button><button class="icon-btn" id="themeBtn" title="Alternar tema" aria-label="Alternar tema">☾</button><button class="icon-btn" id="newTop" title="Nova atividade" aria-label="Nova atividade">＋</button></div></div>
