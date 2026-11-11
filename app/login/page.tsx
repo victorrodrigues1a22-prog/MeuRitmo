@@ -20,6 +20,9 @@ export default async function LoginPage() {
           <span aria-hidden="true">↗</span>
           Entrar com ChatGPT
         </a>
+        <p className="login-account-help">
+          O acesso usa a conta ChatGPT ativa neste navegador. Para entrar com outra, troque de conta no ChatGPT ou abra esta página em uma janela privada.
+        </p>
         <p className="login-footnote">Seus dados de planejamento ficam separados por conta.</p>
       </section>
       <footer className="login-footer">Meu Ritmo · rotina e planejamento</footer>

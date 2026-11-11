@@ -172,6 +172,13 @@ body {
   gap: 12px;
 }
 
+.planner-user {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  text-align: right;
+}
+
 .planner-mark {
   display: grid;
   width: 29px;
@@ -187,6 +194,15 @@ body {
   max-width: min(35vw, 280px);
   overflow: hidden;
   color: #84787c;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.planner-user-email {
+  max-width: min(35vw, 280px);
+  overflow: hidden;
+  color: #a09599;
+  font: 400 11px/1.2 "DM Sans", Arial, sans-serif;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -284,6 +300,12 @@ body {
   font: 400 11px/1.5 "DM Sans", Arial, sans-serif;
 }
 
+.login-account-help {
+  margin: 14px 0 0;
+  color: #81757a;
+  font: 400 12px/1.55 "DM Sans", Arial, sans-serif;
+}
+
 .login-footer {
   position: absolute;
   bottom: 20px;
@@ -299,6 +321,7 @@ html[data-theme="dark"] .planner-header {
 }
 html[data-theme="dark"] .planner-mark { background: #263e32; color: #8cd3b0; }
 html[data-theme="dark"] .planner-greeting { color: #a4b0a8; }
+html[data-theme="dark"] .planner-user-email { color: #89968e; }
 html[data-theme="dark"] .planner-signout { background: #26312b; color: #b5e0c6; }
 html[data-theme="dark"] .planner-signout:hover { background: #34443a; }
 html[data-theme="dark"] .login-shell {
@@ -308,12 +331,16 @@ html[data-theme="dark"] .login-card { border-color: #34423a; background: #1e2823
 html[data-theme="dark"] .login-mark { background: #263e32; color: #8cd3b0; }
 html[data-theme="dark"] .login-card h1 { color: #eaf1ec; }
 html[data-theme="dark"] .login-description,
+html[data-theme="dark"] .login-account-help,
 html[data-theme="dark"] .login-footnote,
 html[data-theme="dark"] .login-footer { color: #a4b0a8; }
 html[data-theme="dark"] .login-eyebrow { color: #8cd3b0; }
 
 @media (max-width: 520px) {
-  .planner-header { padding: 0 12px; }
-  .planner-greeting { display: none; }
+  .planner-header { padding: 0 10px; }
+  .planner-brand, .planner-account { gap: 8px; }
+  .planner-greeting { max-width: 28vw; font-size: 12px; }
+  .planner-user-email { max-width: 28vw; font-size: 10px; }
+  .planner-signout { padding: 8px; font-size: 12px; }
   .login-card { padding: 34px 25px; }
 }

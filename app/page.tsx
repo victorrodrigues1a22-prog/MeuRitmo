@@ -25,8 +25,11 @@ export default async function Home({ searchParams }: HomeProps) {
           <span>Meu Ritmo</span>
         </div>
         <div className="planner-account">
-          <span className="planner-greeting">{user.displayName}</span>
-          <a href={chatGPTSignOutPath("/login")} target="_top" className="planner-signout">
+          <div className="planner-user" title={user.email}>
+            <span className="planner-greeting">{user.displayName}</span>
+            <span className="planner-user-email">{user.email}</span>
+          </div>
+          <a href={chatGPTSignOutPath("/login")} target="_top" className="planner-signout" title="Sair da conta ChatGPT neste site">
             Sair da conta
           </a>
         </div>
