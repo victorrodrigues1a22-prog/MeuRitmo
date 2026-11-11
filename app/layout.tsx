@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeSync } from "./components/ThemeSync";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <ThemeSync />
+        {children}
+      </body>
     </html>
   );
 }
