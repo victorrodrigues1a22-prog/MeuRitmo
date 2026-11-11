@@ -6,6 +6,7 @@ export const dynamic = "force-dynamic";
 
 type PlannerData = {
   tasks?: unknown;
+  studied?: unknown;
   notices?: unknown;
   profile?: unknown;
   theme?: unknown;
@@ -100,11 +101,12 @@ async function readObject(request: Request): Promise<Record<string, unknown> | R
 }
 
 function sanitizeData(value: Record<string, unknown>): PlannerData | Response {
-  const allowed = new Set(["tasks", "notices", "profile", "theme"]);
+  const allowed = new Set(["tasks", "studied", "notices", "profile", "theme"]);
   if (Object.keys(value).some((key) => !allowed.has(key))) {
     return json({ error: "O conteúdo enviado contém campos não permitidos." }, 400);
   }
   if (value.tasks !== undefined && !Array.isArray(value.tasks)) return json({ error: "Lista de tarefas inválida." }, 400);
+  if (value.studied !== undefined && !Array.isArray(value.studied)) return json({ error: "Lista de assuntos estudados inválida." }, 400);
   if (value.notices !== undefined && !Array.isArray(value.notices)) return json({ error: "Lista de lembretes inválida." }, 400);
   if (value.profile !== undefined && (!value.profile || typeof value.profile !== "object" || Array.isArray(value.profile))) {
     return json({ error: "Perfil inválido." }, 400);

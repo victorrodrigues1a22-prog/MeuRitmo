@@ -2,6 +2,7 @@ const API_URL = "/api/planner";
 const OWNER_KEY = "rotinamed.ownerUserId";
 const LOCAL_KEYS = {
   tasks: "rotinamed.tasks",
+  studied: "rotinamed.studied",
   notices: "rotinamed.notices",
   profile: "rotinamed.profile",
   theme: "rotinamed.theme",
