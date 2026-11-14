@@ -28,12 +28,16 @@ yarn-error.log*
 
 # Local environment and keys
 .env*
+!/.env.example
 .dev.vars*
 *.pem
 
 # Checkout-local tool state
 /.wrangler/
 /.sites-runtime/
+/.openai/
+/.render-validation/
+/.pg-staging/
 
 # Workspace scaffolding and publication archives
 /.agents/

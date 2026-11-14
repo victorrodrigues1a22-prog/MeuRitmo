@@ -1,7 +1,6 @@
-import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { getAuthenticatedUser } from "../../auth";
+import { getPool } from "../../../db/index";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 type PlannerData = {
@@ -16,74 +15,76 @@ const json = (body: unknown, status = 200) =>
   Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 
 async function authenticatedUser() {
-  const user = await getChatGPTUser();
-  if (!user) return null;
-  if (!env.DB) throw new Error("O armazenamento da conta ainda não está disponível.");
-  return user;
+  return getAuthenticatedUser();
 }
 
 export async function GET() {
   const user = await authenticatedUser();
-  if (!user) return json({ error: "É necessário entrar com uma conta ChatGPT." }, 401);
+  if (!user) return json({ error: "É necessário entrar com uma conta Google." }, 401);
+  if (isLocalOnly()) return json({ userId: user.userId, data: null, localOnly: true });
 
-  const row = await env.DB!.prepare(
-    "SELECT data_json FROM planner_data WHERE user_id = ?1",
-  ).bind(user.userId).first<{ data_json: string }>();
+  const result = await getPool().query<{ data_json: PlannerData }>(
+    "SELECT data_json FROM planner_data WHERE user_id = $1",
+    [user.userId],
+  );
 
-  let data: PlannerData | null = null;
-  if (row?.data_json) {
-    try {
-      data = JSON.parse(row.data_json) as PlannerData;
-    } catch {
-      return json({ error: "Os dados salvos estão inválidos." }, 500);
-    }
-  }
+  const data = result.rows[0]?.data_json ?? null;
   return json({ userId: user.userId, data });
 }
 
 export async function PUT(request: Request) {
+  if (!isSameOrigin(request)) return json({ error: "Origem da solicitação inválida." }, 403);
   const user = await authenticatedUser();
-  if (!user) return json({ error: "É necessário entrar com uma conta ChatGPT." }, 401);
+  if (!user) return json({ error: "É necessário entrar com uma conta Google." }, 401);
 
   const body = await readObject(request);
   if (body instanceof Response) return body;
   const data = sanitizeData(body);
   if (data instanceof Response) return data;
+  if (isLocalOnly()) return json({ ok: true, localOnly: true });
 
-  await env.DB!.prepare(`
+  await getPool().query(`
     INSERT INTO planner_data (user_id, data_json, updated_at)
-    VALUES (?1, ?2, datetime('now'))
-    ON CONFLICT(user_id) DO UPDATE SET data_json = excluded.data_json, updated_at = excluded.updated_at
-  `).bind(user.userId, JSON.stringify(data)).run();
+    VALUES ($1, $2::jsonb, NOW())
+    ON CONFLICT(user_id) DO UPDATE SET data_json = EXCLUDED.data_json, updated_at = NOW()
+  `, [user.userId, JSON.stringify(data)]);
   return json({ ok: true });
 }
 
 export async function PATCH(request: Request) {
+  if (!isSameOrigin(request)) return json({ error: "Origem da solicitação inválida." }, 403);
   const user = await authenticatedUser();
-  if (!user) return json({ error: "É necessário entrar com uma conta ChatGPT." }, 401);
+  if (!user) return json({ error: "É necessário entrar com uma conta Google." }, 401);
 
   const body = await readObject(request);
   if (body instanceof Response) return body;
   const patch = sanitizeData(body);
   if (patch instanceof Response) return patch;
+  if (isLocalOnly()) return json({ ok: true, localOnly: true });
 
-  const row = await env.DB!.prepare(
-    "SELECT data_json FROM planner_data WHERE user_id = ?1",
-  ).bind(user.userId).first<{ data_json: string }>();
-  let current: PlannerData = {};
-  try {
-    if (row?.data_json) current = JSON.parse(row.data_json) as PlannerData;
-  } catch {
-    return json({ error: "Os dados salvos estão inválidos." }, 500);
-  }
-  const merged = { ...current, ...patch };
-
-  await env.DB!.prepare(`
+  await getPool().query(`
     INSERT INTO planner_data (user_id, data_json, updated_at)
-    VALUES (?1, ?2, datetime('now'))
-    ON CONFLICT(user_id) DO UPDATE SET data_json = excluded.data_json, updated_at = excluded.updated_at
-  `).bind(user.userId, JSON.stringify(merged)).run();
+    VALUES ($1, $2::jsonb, NOW())
+    ON CONFLICT(user_id) DO UPDATE SET
+      data_json = planner_data.data_json || EXCLUDED.data_json,
+      updated_at = NOW()
+  `, [user.userId, JSON.stringify(patch)]);
   return json({ ok: true });
+}
+
+function isLocalOnly() {
+  return process.env.NODE_ENV !== "production" && !process.env.DATABASE_URL;
+}
+
+function isSameOrigin(request: Request) {
+  const origin = request.headers.get("origin");
+  if (!origin) return false;
+  try {
+    const expected = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL;
+    return new URL(origin).origin === (expected ? new URL(expected).origin : new URL(request.url).origin);
+  } catch {
+    return false;
+  }
 }
 
 async function readObject(request: Request): Promise<Record<string, unknown> | Response> {

@@ -11,6 +11,7 @@ const LOCAL_KEYS = {
 let plannerData = {};
 let syncing = Promise.resolve();
 let syncStatus;
+let localOnly = false;
 
 function readLocalData() {
   const data = {};
@@ -85,8 +86,23 @@ export async function initializePlannerSync() {
   try {
     const response = await fetch(API_URL, { cache: "no-store" });
     if (!response.ok) throw new Error("Não foi possível carregar os dados da sua conta.");
-    const { userId, data } = await response.json();
+    const { userId, data, localOnly: browserOnly } = await response.json();
     const previousUserId = localStorage.getItem(OWNER_KEY);
+    if (browserOnly) {
+      const localData = readLocalData();
+      const hasLocalData = Object.keys(localData).length > 0;
+      const importPreviousData = previousUserId && previousUserId !== userId && hasLocalData
+        ? window.confirm("Esta conta ainda não tem dados salvos. Quer manter neste navegador os dados da conta anterior? Faça isso somente se os dados forem seus.")
+        : true;
+      plannerData = importPreviousData ? localData : {};
+      if (plannerData.profile) plannerData.profile = await shrinkLegacyProfile(plannerData.profile);
+      writeLocalData(plannerData);
+      localStorage.setItem(OWNER_KEY, userId);
+      localOnly = true;
+      setStatus("Modo local: dados salvos neste navegador");
+      return;
+    }
+    localOnly = false;
     if (data) {
       plannerData = data;
       writeLocalData(data);
@@ -96,7 +112,18 @@ export async function initializePlannerSync() {
       if (Object.keys(plannerData).length) await send("PUT", plannerData);
       writeLocalData(plannerData);
     } else {
-      plannerData = {};
+      const localData = readLocalData();
+      const hasLocalData = Object.keys(localData).length > 0;
+      const importPreviousData = hasLocalData && window.confirm(
+        "Esta conta Google ainda não tem dados salvos. Quer importar para ela as tarefas e preferências que estão neste navegador? Faça isso somente se os dados forem seus.",
+      );
+      if (importPreviousData) {
+        plannerData = localData;
+        if (plannerData.profile) plannerData.profile = await shrinkLegacyProfile(plannerData.profile);
+        await send("PUT", plannerData);
+      } else {
+        plannerData = {};
+      }
       writeLocalData(plannerData);
     }
     localStorage.setItem(OWNER_KEY, userId);
@@ -110,6 +137,10 @@ export async function initializePlannerSync() {
 export function persistPlannerPatch(patch) {
   plannerData = { ...plannerData, ...patch };
   writeLocalData(plannerData);
+  if (localOnly) {
+    setStatus("Salvo neste navegador (modo local)");
+    return;
+  }
   const snapshot = { ...plannerData };
   syncing = syncing.then(async () => {
     await send("PATCH", snapshot);

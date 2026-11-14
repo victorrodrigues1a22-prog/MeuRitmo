@@ -219,6 +219,47 @@ body {
   background: #eee0e4;
 }
 
+.planner-transfer { position: relative; }
+.planner-transfer > summary {
+  cursor: pointer;
+  list-style: none;
+  border-radius: 9px;
+  background: #f5eff0;
+  padding: 8px 10px;
+  color: #6e3044;
+  font: 600 12px "DM Sans", Arial, sans-serif;
+}
+.planner-transfer > summary::-webkit-details-marker { display: none; }
+.planner-transfer-menu {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  min-width: 170px;
+  gap: 4px;
+  border: 1px solid #ece2e5;
+  border-radius: 12px;
+  background: #fff;
+  padding: 6px;
+  box-shadow: 0 12px 32px #30192322;
+}
+.planner-transfer-menu button,
+.planner-transfer-menu label {
+  cursor: pointer;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding: 9px 10px;
+  color: #43353a;
+  font: 500 12px "DM Sans", Arial, sans-serif;
+  text-align: left;
+}
+.planner-transfer-menu button:hover,
+.planner-transfer-menu label:hover { background: #f7eff1; }
+.planner-transfer-menu input { display: none; }
+.planner-transfer-menu p { margin: 3px 7px 5px; color: #6e3044; font: 400 11px/1.4 "DM Sans", Arial, sans-serif; }
+
 .planner-frame {
   width: 100%;
   min-height: 0;
@@ -306,6 +347,24 @@ body {
   font: 400 12px/1.55 "DM Sans", Arial, sans-serif;
 }
 
+.login-error {
+  margin: 0 0 16px;
+  border: 1px solid #e8c2cb;
+  border-radius: 10px;
+  background: #fff4f6;
+  padding: 11px 12px;
+  color: #802e43;
+  font: 500 12px/1.5 "DM Sans", Arial, sans-serif;
+}
+
+.login-dev-link {
+  display: block;
+  margin-top: 15px;
+  color: #7f3b50;
+  font: 600 12px "DM Sans", Arial, sans-serif;
+  text-align: center;
+}
+
 .login-footer {
   position: absolute;
   bottom: 20px;
@@ -324,6 +383,13 @@ html[data-theme="dark"] .planner-greeting { color: #a4b0a8; }
 html[data-theme="dark"] .planner-user-email { color: #89968e; }
 html[data-theme="dark"] .planner-signout { background: #26312b; color: #b5e0c6; }
 html[data-theme="dark"] .planner-signout:hover { background: #34443a; }
+html[data-theme="dark"] .planner-transfer > summary { background: #26312b; color: #b5e0c6; }
+html[data-theme="dark"] .planner-transfer-menu { border-color: #34423a; background: #1e2823; }
+html[data-theme="dark"] .planner-transfer-menu button,
+html[data-theme="dark"] .planner-transfer-menu label { color: #eaf1ec; }
+html[data-theme="dark"] .planner-transfer-menu button:hover,
+html[data-theme="dark"] .planner-transfer-menu label:hover { background: #263e32; }
+html[data-theme="dark"] .planner-transfer-menu p { color: #b5e0c6; }
 html[data-theme="dark"] .login-shell {
   background: radial-gradient(ellipse at 50% 18%, #24332a 0, #151c19 58%, #111714 100%);
 }
@@ -334,13 +400,15 @@ html[data-theme="dark"] .login-description,
 html[data-theme="dark"] .login-account-help,
 html[data-theme="dark"] .login-footnote,
 html[data-theme="dark"] .login-footer { color: #a4b0a8; }
+html[data-theme="dark"] .login-error { border-color: #713d49; background: #352329; color: #f0c4cf; }
 html[data-theme="dark"] .login-eyebrow { color: #8cd3b0; }
 
 @media (max-width: 520px) {
   .planner-header { padding: 0 10px; }
-  .planner-brand, .planner-account { gap: 8px; }
+  .planner-brand, .planner-account { gap: 6px; }
   .planner-greeting { max-width: 28vw; font-size: 12px; }
-  .planner-user-email { max-width: 28vw; font-size: 10px; }
+  .planner-user-email { max-width: 24vw; font-size: 10px; }
   .planner-signout { padding: 8px; font-size: 12px; }
+  .planner-transfer > summary { padding: 8px; font-size: 11px; }
   .login-card { padding: 34px 25px; }
 }
